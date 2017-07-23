@@ -20,15 +20,22 @@
 
 // TODO a virer une fois la base nettoyee des oui et non.
 function oui_non_to_bool($s) {
-  if ($s === 'oui') { return true; }
-  else if ($s === 'non') { return false; }
-  else { throw new InvalidArgumentException('$s different de oui ou non.'); }
+  if ($s === 'oui') {
+    return true;
+  } else if ($s === 'non') {
+    return false;
+  } else {
+    throw new InvalidArgumentException('$s different de oui ou non.');
+  }
 }
 
 // TODO a virer une fois la base nettoyee des oui et non.
 function bool_to_oui_non($b) {
-  if ($b === true) { return 'oui'; }
-  else { return 'non'; }
+  if ($b === true) {
+    return 'oui';
+  } else {
+    return 'non';
+  }
 }
 
 function validate_json_login($unsafe_json) {
@@ -38,17 +45,17 @@ function validate_json_login($unsafe_json) {
 
 function validate_json_sorties($unsafe_json) {
   $filters = [
-      'id_type_action' => FILTER_DEFAULT, // Peux etre NULL
-      'antidate' => FILTER_DEFAULT,       // Peux etre NULL validation faite plus tard.
-      'localite' => FILTER_DEFAULT,       // Peux etre NULL
-      'id_point' => FILTER_VALIDATE_INT,
-      'id_user' => FILTER_VALIDATE_INT,
-      'items' => FILTER_DEFAULT,
-      'evacs' => FILTER_DEFAULT,
-      'commentaire' => FILTER_SANITIZE_STRING,
-      // TODO: remplacer par une regex sortie|sortier...
-      // Ou remplacer par des id.
-      'classe' => FILTER_SANITIZE_STRING
+    'id_type_action' => FILTER_DEFAULT, // Peux etre NULL
+    'antidate' => FILTER_DEFAULT, // Peux etre NULL validation faite plus tard.
+    'localite' => FILTER_DEFAULT, // Peux etre NULL
+    'id_point' => FILTER_VALIDATE_INT,
+    'id_user' => FILTER_VALIDATE_INT,
+    'items' => FILTER_DEFAULT,
+    'evacs' => FILTER_DEFAULT,
+    'commentaire' => FILTER_SANITIZE_STRING,
+    // TODO: remplacer par une regex sortie|sortier...
+    // Ou remplacer par des id.
+    'classe' => FILTER_SANITIZE_STRING
   ];
   $flag = ['flags' => FILTER_NULL_ON_FAILURE];
   $flags = [];
@@ -74,14 +81,14 @@ function validate_json_sorties($unsafe_json) {
 
 function validate_json_collecte($unsafe_json) {
   $filters = [
-      'id_type_action' => FILTER_VALIDATE_INT,
-      'antidate' => FILTER_DEFAULT,
-      'localite' => FILTER_VALIDATE_INT,
-      'id_point' => FILTER_VALIDATE_INT,
-      'id_user' => FILTER_VALIDATE_INT,
-      'items' => FILTER_DEFAULT,
-      'commentaire' => FILTER_SANITIZE_STRING,
-      'classe' => FILTER_SANITIZE_STRING
+    'id_type_action' => FILTER_VALIDATE_INT,
+    'antidate' => FILTER_DEFAULT,
+    'localite' => FILTER_VALIDATE_INT,
+    'id_point' => FILTER_VALIDATE_INT,
+    'id_user' => FILTER_VALIDATE_INT,
+    'items' => FILTER_DEFAULT,
+    'commentaire' => FILTER_SANITIZE_STRING,
+    'classe' => FILTER_SANITIZE_STRING
   ];
   $flag = ['flags' => FILTER_NULL_ON_FAILURE];
   $flags = [];
@@ -98,6 +105,9 @@ function validate_json_collecte($unsafe_json) {
     } else {
       $json[$k] = $filtered;
     }
+  }
+  if (count($json['items']) <= 0) {
+    throw new UnexpectedValueException('Collecte sans pesées.');
   }
   return $json;
 }
