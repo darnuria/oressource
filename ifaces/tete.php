@@ -65,7 +65,7 @@ $can_config = is_allowed_config();
               <li class="nav navbar-nav dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Points de collecte<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <?php foreach (points_collectes($bdd) as $point_collecte) { ?>
+                  <?php foreach (points_collectes_visibles($bdd) as $point_collecte) { ?>
                     <li>
                       <a href="../ifaces/collecte.php?numero=<?= "{$point_collecte['id']}"; ?>"><?= $point_collecte['nom']; ?></a>
                     </li>

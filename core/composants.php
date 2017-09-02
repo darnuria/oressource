@@ -108,6 +108,22 @@ function configNav(array $props) {
   return ob_get_clean();
 }
 
+function buttonSubmitConfig(array $props) {
+  ob_start();
+  if ($props['id'] > 0) {
+    ?>
+    <input type="hidden" name="id" id="id" value="<?= $props['id']; ?>">
+    <button name="modifier" class="btn btn-warning">Modifier</button>
+    <a href="edition_utilisateurs.php">
+      <button name="creer" class="btn btn">Annuler</button>
+    </a>
+  <?php } else { ?>
+    <button name="creer" class="btn btn-default">Créer</button>
+  <?php
+  }
+  return ob_get_clean();
+}
+
 function configInfo(array $props) {
   ob_start();
   ?>
@@ -118,21 +134,63 @@ function configInfo(array $props) {
     <div class = "panel-body">
       <?= textInput(['name' => 'nom', 'text' => "Nom:"], $props['nom']) ?>
       <?= textInput(['name' => 'prenom', 'text' => "Prénom:"], $props['prenom']) ?>
-      <?= mailInput(['name' => 'mail', 'text' => "Courriel:"], $props['mail']) ?>
-      <?php if ($props['type'] === 'edit') { ?>
+  <?= mailInput(['name' => 'mail', 'text' => "Courriel:"], $props['mail']) ?>
+  <?php if ($props['type'] === 'edit') { ?>
         <a href="edition_mdp_admin.php?id=<?= $props['id']; ?>&mail=<?= $props['mail'] ?>">
           <button name="creer" type="button" class="btn btn btn-danger">Changer le mot de passe</button>
         </a>
-      <?php } else { ?>
+  <?php } else { ?>
         <label>Mot de passe
           <input type="password" name="pass1" id="pass1" class="form-control" required>
         </label>
         <label>Répetez le mot de passe
           <input type="password" name="pass2" id="pass2" class="form-control" required>
         </label>
-      <?php } ?>
+  <?php } ?>
     </div>
   </div>
   <?php
   return ob_get_clean();
 }
+
+function colorInput(array $props, string $state) {
+  ob_start();
+  ?>
+  <label><?= $props['text'] ?>
+    <input type="color"
+           value="<?= '#' . $state ?>"
+           name="<?= $props['name'] ?>"
+           id="<?= $props['name']?>"
+           class="form-control" required>
+  </label>
+  <?php
+  return ob_get_clean();
+}
+
+function colorSpan(array $props) {
+  ob_start();
+  ?>
+  <span class="badge"
+        style="background-color:<?= $props['couleur']; ?>" /><?= $props['couleur']; ?></span>
+  <?php
+  return ob_get_clean();
+}
+
+function checkboxOnOff(array $props, bool $state) {
+  ob_start();
+  ?>
+  <label><?= $props['name'] . ' :' ?>
+    <input class="make-switch"
+           id="<?= $props['name'] ?>"
+           type="checkbox"
+           name="<?= $props['name'] ?>"
+  <?= $state ? 'checked' : '' ?>
+           data-on-text="<?= $props['text']['on'] ?>"
+           data-off-text="<?= $props['text']['off'] ?>"
+           data-handle-width="28"
+           data-size="small" />
+    <script>$("[name='<?= $props['name']; ?>']").bootstrapSwitch();</script>
+    <label/>
+    <?php
+    return ob_get_clean();
+  }

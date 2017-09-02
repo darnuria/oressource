@@ -209,9 +209,19 @@ function points_sorties_id(PDO $bdd, int $id): array {
 }
 
 function points_collectes(PDO $bdd): array {
-  $stmt = $bdd->prepare('SELECT id, nom, adresse, pesee_max FROM points_collecte WHERE visible = "oui"');
+  $stmt = $bdd->prepare('SELECT id, nom, adresse, pesee_max, couleur, commentaire, visible, timestamp FROM points_collecte');
   $stmt->execute();
-  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return array_map(function (array $e): array {
+    $e['visible'] = $e['visible'] === 'oui';
+    return $e;
+  }, $stmt->fetchAll(PDO::FETCH_ASSOC));
+}
+
+function points_collectes_visibles(PDO $bdd): array {
+  $result = points_collectes($bdd);
+  return array_filter($result, function (array $e): bool {
+    return $e['visible'];
+  });
 }
 
 function points_sorties(PDO $bdd): array {

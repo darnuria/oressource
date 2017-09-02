@@ -52,7 +52,7 @@ if (is_valid_session() && is_allowed_users()) {
       'text' => "Points de collecte:",
       'data' => array_map(function ($a) {
           return [['name' => "niveauc{$a['id']}", 'text' => $a['nom']], false];
-        }, points_collectes($bdd))
+        }, points_collectes_visibles($bdd))
     ];
 
     $ventes = [
@@ -103,7 +103,7 @@ if (is_valid_session() && is_allowed_users()) {
       'text' => "Points de collecte:",
       'data' => array_map(function ($a) use ($utilisateur) {
           return [['name' => "niveauc{$a['id']}", 'text' => $a['nom']], utilisateur_collecte($utilisateur, $a['id'])];
-        }, points_collectes($bdd))
+        }, points_collectes_visibles($bdd))
     ];
 
     $ventes = [
@@ -133,9 +133,6 @@ if (is_valid_session() && is_allowed_users()) {
   <div class="container">
     <?= configNav($nav); ?>
     <form action="<?= $urlPost ?>" method="post">
-      <?php if (isset($_GET['id'])) { ?>
-        <input type="hidden" name="id" id="id" value="<?= $_GET['id']; ?>">
-      <?php } ?>
       <div class="row">
         <div class="col-md-4">
           <?= configInfo($info) ?>
@@ -151,18 +148,10 @@ if (is_valid_session() && is_allowed_users()) {
           <?= configCheckboxArea($ventes) ?>
           <?= configCheckboxArea($sorties) ?>
         </div>
-
         <div class="row">
           <div class="col-md-5 col-md-offset-5">
-            <?php if (isset($_GET['id'])) { ?>
-              <button name="modifier" class="btn btn-warning">Modifier</button>
-              <a href="edition_utilisateurs.php">
-                <button name="creer" class="btn btn">Annuler</button>
-              </a>
-            </div>
-          <?php } else { ?>
-            <button name="creer" class="btn btn-default">Créer!</button>
-          <?php } ?>
+            <?= buttonSubmitConfig(['href' => 'edition_utilisateurs.php', 'id' => $_GET['id'] ?? 0]) ?>
+          </div>
         </div>
       </div>
     </form>
